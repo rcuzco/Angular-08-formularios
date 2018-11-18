@@ -52,7 +52,25 @@ export class DataComponent implements OnInit
       });
 
     //agregando los validadores de otra forma
-    this.forma.controls["password2"].setValidators([Validators.required,this.noIguales.bind(this.forma)]);
+    this.forma.controls["password2"].setValidators([Validators.required, this.noIguales.bind(this.forma)]);
+
+    //suscribirse a cambios en el formulario 
+    this.forma.valueChanges.subscribe(data =>
+    {
+      console.log(data);
+    });
+    //suscribise a cambios en un control específico
+    this.forma.controls["username"].valueChanges.subscribe(data =>
+    {
+      console.log(data);
+    });
+    //suscribise a cambios en un control específico y ver si su estatus es válido o no
+    this.forma.controls["username"].statusChanges.subscribe(data =>
+    {
+      console.log(data);
+    });
+
+
     this.forma.setValue(this.usuario); //con esta línea llenamos el formulario con los datos del objeto usuario, OJO, tienen q tener las mismas propiedades
   }
 
