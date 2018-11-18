@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup,FormControl,Validators, FormArray } from '@angular/forms';
 import { validateConfig } from '@angular/router/src/config';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-data',
@@ -20,7 +21,8 @@ export class DataComponent implements OnInit
       correo: "lorem@ipsum.com"
       , pasatiempos: ["correr"],
       password1: "",
-      password2:""
+      password2: "",
+      username:""
     }
 
   constructor()
@@ -43,9 +45,10 @@ export class DataComponent implements OnInit
         "pasatiempos": new FormArray(
           [
             new FormControl("Comer",Validators.required)
-          ]),
+          ]),        
         "password1": new FormControl(),
-        "password2": new FormControl()
+        "password2": new FormControl(),
+        "username": new FormControl("", [Validators.required], this.existeUsuario)
       });
 
     //agregando los validadores de otra forma
@@ -72,6 +75,26 @@ export class DataComponent implements OnInit
     }
     return null; //la validación pasa. si no devuelvo nada, la validación se ha pasado
   }
+  //validadores asíncronos
+  existeUsuario(control: FormControl): Promise<any> | Observable<any>
+  {
+    let promesa = new Promise((resolve, reject) =>
+    {
+      setTimeout(() =>
+      {
+        if (control.value === "rcuzco")
+        {
+          resolve({ existe: true });
+        } else
+        {
+          resolve(null);
+        }
+      },4000);
+    });
+    return promesa;
+  }
+  
+
 
 
   ngOnInit()
