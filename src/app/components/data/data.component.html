@@ -1,31 +1,42 @@
 <h4>Formularios <small>data</small></h4>
 <hr>
-<form [formGroup]="forma" (ngSubmit)="guardarCambios()" novalidate="novalidate"  >
-  <div>
+<form [formGroup]="forma" (ngSubmit)="guardarCambios()" novalidate="novalidate">
+  <div formGroupName="nombrecompleto">
     <div class="form-group row">
       <label class="col-2 col-form-label">Nombre</label>
       <div class="col-8">
         <input class="form-control"
                type="text"
-               [ngClass]="{ 'is-invalid': (forma.controls['nombre'].errors?.minlength || forma.controls['nombre'].errors?.required) && forma.controls['nombre'].touched }"
+               [ngClass]="{ 'is-invalid': (forma.controls['nombrecompleto'].controls['nombre'].errors?.minlength || forma.controls['nombrecompleto'].controls['nombre'].errors?.required) && forma.controls['nombrecompleto'].controls['nombre'].touched }"
                placeholder="Nombre" formControlName="nombre">
-        <div *ngIf="forma.controls['nombre'].errors?.required && forma.controls['nombre'].touched"
+        <div *ngIf="forma.controls['nombrecompleto'].controls['nombre'].errors?.required && forma.controls['nombrecompleto'].controls['nombre'].touched"
              class="invalid-feedback d-block">Este campo es requerido</div>
-        <div *ngIf="forma.controls['nombre'].errors?.minlength"
-             class="invalid-feedback d-block">Este campo requiere por lo menos {{ forma.controls['nombre'].errors?.minlength?.requiredLength }} caracteres</div>
+        <div *ngIf="forma.controls['nombrecompleto'].controls['nombre'].errors?.minlength"
+             class="invalid-feedback d-block">Este campo requiere por lo menos{{ forma.controls['nombrecompleto'].controls['nombre'].errors?.minlength?.requiredLength }}caracteres</div>
       </div>
     </div>
     <div class="form-group row">
       <label class="col-2 col-form-label">Apellido</label>
       <div class="col-8">
         <input class="form-control"
-               [ngClass]="{ 'is-invalid': (forma.controls['apellido'].errors?.minlength || forma.controls['apellido'].errors?.required) && forma.controls['apellido'].touched }"
+               [ngClass]="{ 'is-invalid': (forma.get('nombrecompleto.apellido').errors?.noguzman || forma.get('nombrecompleto.apellido').errors?.required) && forma.get('nombrecompleto.apellido').touched }"
                type="text"
                placeholder="Apellido" formControlName="apellido">
-        <div *ngIf="forma.get('apellido').errors?.required && forma.get('apellido').touched"
+        <div *ngIf="forma.get('nombrecompleto.apellido').errors?.required && forma.get('nombrecompleto.apellido').touched"
              class="invalid-feedback d-block">Este campo es requerido</div>
+        <div *ngIf="forma.get('nombrecompleto.apellido').errors?.noguzman && forma.get('nombrecompleto.apellido').touched"
+             class="invalid-feedback d-block">No se permite el apellido guzman</div>
       </div>
     </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Pasatiempos</label>
+    <div class="col-8" formArrayName="pasatiempos">
+      <input *ngFor="let pasatiempo of forma.get('pasatiempos').controls;let i=index"
+             [formControlName]="i"
+             type="text" class="form-control" />
+    </div>
+    <button type="button" class="btn btn-outline-primary" (click)="agregarPasatiempo()">Agregar Pasatiempo</button>
   </div>
   <div class="form-group row">
     <label class="col-2 col-form-label">Correo</label>
@@ -36,6 +47,18 @@
              placeholder="Correo electrónico" formControlName="correo">
       <div class="invalid-feedback" *ngIf="forma.get('correo').errors?.required">Este campo es requerido</div>
       <div class="invalid-feedback" *ngIf="forma.get('correo').errors?.pattern">El valor {{ forma.get('correo').errors.pattern.actualValue }} no es una dirección de correo electrónico válida</div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Password</label>
+    <div class="col-8">
+      <input type="password" class="form-control" formControlName="password1" placeholder="password" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Repetir Password</label>
+    <div class="col-8">
+      <input type="password" class="form-control" formControlName="password2" placeholder="repetir password" />
     </div>
   </div>
 
